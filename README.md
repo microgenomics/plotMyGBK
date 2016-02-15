@@ -14,7 +14,7 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 ##Installation
 
 * If you want to classify your genes by functions, download the zip from [here](https://www.dropbox.com/s/n6ycyhrtlz3ixeb/data.zip?dl=0), and unzip. This package have all neccesary files to classify your genes using the Cog Assignments.
-* Download the script from [this repository](=) and put them together with data folder that you unzipped previously.
+* Download the script from [this repository](https://github.com/microgenomics/plotMyGBK/archive/master.zip) and put them together with data folder that you unzipped previously.
 
 ## Usage
 
