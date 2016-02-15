@@ -136,11 +136,12 @@ def GBKParser(genbank_file, makecog, filterc):
 					reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
 					reverse.write("\n")
 			else:
+				contigband=1
 				if locations[2]=="+":
-					forward.write("%s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname))  #gene, start, end, contig
+					forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "E"))  #just for color
 					forward.write("\n")
 				else:
-					reverse.write("%s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname))  #gene, start, end, contig
+					reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "M"))  #just for color
 					reverse.write("\n")
 
 		rrnafeats = [feat for feat in rec.features if feat.type == "rRNA"]
@@ -255,8 +256,9 @@ def main():
 		faafile=MakeCog(genbank_file)
 		callRPSBlast(faafile)
 	else:
-		subprocess.call(["mkdir",str("results_"+genbank_file)])
-		resultsfolder=str("results_"+gbkname)
+		resultsfolder=str("results_"+gbkname+".faa")
+		subprocess.call(["rm","-rf",str("results_"+gbkname+".faa")])
+		subprocess.call(["mkdir",str("results_"+gbkname+".faa")])
 		os.chdir(resultsfolder)
 
 	print "Parsing GBK"
