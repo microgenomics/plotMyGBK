@@ -1,3 +1,18 @@
+from __future__ import with_statement 
+
+# ==============================================================================
+# 						plotMyGBK
+#
+# Author: Sandro Valenzuela (sandrolvalenzuead@gmail.com) 
+#
+# Please type "python plotMyGBK.py -h" for usage help
+#
+# ==============================================================================
+
+__author__ = 'Sandro Valenzuela (sandrolvalenzuead@gmail.com)'
+__version__ = '1.0'
+__date__ = '15 February 2016'
+
 import sys, os, re, multiprocessing
 import subprocess, csv
 from optparse import OptionParser
