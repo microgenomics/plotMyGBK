@@ -13,7 +13,7 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 
 ##Installation
 
-* If you want to classify your genes by functions, download the zip from [here](https://www.dropbox.com/s/n6ycyhrtlz3ixeb/data.zip?dl=0), and unzip. This package have all neccesary files to classify your genes using the Cog Assignments.
+* If you want to classify your genes by functions, download the zip from [here](https://www.dropbox.com/s/n6ycyhrtlz3ixeb/data.zip?dl=0), and unzip. This package have all neccesary files to classify your genes using the COG Assignments.
 * Download the script from [this repository](https://github.com/microgenomics/plotMyGBK/archive/master.zip) and put them together with data folder that you unzipped previously.
 
 ## Usage
@@ -43,3 +43,8 @@ Since your gbk, plotMyGBK will generate a folder called results\_GBKNAME.faa whe
 ##Notes
 * When you execute plotMyGBK.py make sure data folder and plotstep.R are in that directory.
 * The rpsblast in the data folder was compiled in Mac OSX, if you use other OS, you have to put the corresponding binary of rpsblast in this data folder
+
+##References
+* Marchler-Bauer A, Anderson JB, DeWeese-Scott C, Fedorova ND, Geer LY, He S, Hurwitz DI, Jackson JD, Jacobs AR, Lanczycki CJ, Lie- bert CA, Liu C, Madej T, Marchler GH, Mazumder R, Nikolskaya AN, Panchenko AR, Rao BS, Shoemaker BA, Simonyan V, Song JS, Thiessen PA, Vasudevan S, Wang Y, Yamashita RA, Yin JJ, Bryant SH: CDD: a curated Entrez database of conserved domain alignments. Nucleic Acids Res 2003, 31:383-387
+* Ying Hu Chunhua Yan <yanch@mail.nih.gov> (2015). OmicCircos: High-quality circular visualization of omics data. R package version
+  1.8.1.
