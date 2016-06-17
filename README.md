@@ -24,13 +24,14 @@ plotMyGBK have minimal use:
 
 and a complete use:
 	
-	python plotMyGBK.py -f mygenbank.gbk -C Y -F Y -w 3000 -s 1500
+	python plotMyGBK.py -f mygenbank.gbk -C Y -F Y -w 3000 -s 1500 -t 16
 
 * -f is the genbank file
 * -C Cog Assign, this will call to rpsblast (provided in data folder, v=2.2.31+), and classify the genes by Cog function. default=N
 * -F Filter Contigs, show only contigs that have genes. default=Y
 * -w Windows size, to computing GC content and GC skew set the windows size, default:3000
 * -s Step size, size in bp to move windows (-w), default:1500
+* -t Threads, threads for rpsblast
 
 ##Trick
 
