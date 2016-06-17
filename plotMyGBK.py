@@ -23,201 +23,199 @@ from Bio import SeqIO
 
 def printPlotStep():
 	plotstep=open("plotstep.R", 'w')
-	plotstep.write("rm(list=ls());\n")
-	plotstep.write("library(Rsamtools)\n")
-	plotstep.write("library(OmicCircos)\n")
-	plotstep.write("library(data.table)\n")
-	plotstep.write("args<-commandArgs()\n")
-	plotstep.write("gl<-as.numeric(args[6])\n")
-	plotstep.write("makecog<-c(args[7])\n")
-	plotstep.write("measure<-data.frame(seg.name=seq(1:8), seg.start=seq(1:8), seg.end=seq(1:8)+1, seg.value=1)\n")
-	plotstep.write("measure2<-data.frame(seg.name=1, seg.start=1, seg.end=signif(2*gl/12/1000), seg.value=round(2*gl/12/1000,0))\n")
-	plotstep.write("measure4<-data.frame(seg.name=1, seg.start=1, seg.end=signif(4*gl/12/1000), seg.value=round(4*gl/12/1000,0))\n")
-	plotstep.write("measure8<-data.frame(seg.name=1, seg.start=1, seg.end=signif(8*gl/12/1000), seg.value=round(8*gl/12/1000,0))\n")
-	plotstep.write("measure10<-data.frame(seg.name=1, seg.start=1, seg.end=signif(10*gl/12/1000), seg.value=round(10*gl/12/1000,0))\n")
-	plotstep.write("measure[\"V5\"]<-measure2[\"V5\"]<-measure4[\"V5\"]<-measure8[\"V5\"]<-measure10[\"V5\"]<-1\n")
-	plotstep.write("data<-read.table(\"contigplot.dat\",header=F)\n")
-	plotstep.write("fdata<-read.table(\"forwardplot.dat\",header=F)\n")
-	plotstep.write("rdata<-read.table(\"reverseplot.dat\",header=F)\n")
-	plotstep.write("rnadata<-read.table(\"rna.dat\",header=F)\n")
-	plotstep.write("gcdata<-read.table(\"gcskewplot.dat\",header=F)\n")
-	plotstep.write("if(nrow(data)>1){\n")
-	plotstep.write("  contig<-gcdata[\"V1\"][1,]\n")
-	plotstep.write("  sum<-0\n")
-	plotstep.write("  positive<-data.frame(name=1, value=1)\n")
-	plotstep.write("  negative<-data.frame(name=1, value=1)\n")
-	plotstep.write("  pcont=1\n")
-	plotstep.write("  ncont=1\n")
-	plotstep.write("  for(i in seq(1:nrow(gcdata))){\n")
-	plotstep.write("    if(contig==gcdata[\"V1\"][i,]){\n")
-	plotstep.write("      sum<-sum+gcdata[\"V5\"][i,]\n")
-	plotstep.write("    }else{\n")
-	plotstep.write("      if(sum>0){\n")
-	plotstep.write("        positive[pcont,1]<-as.character(contig)\n")
-	plotstep.write("        positive[pcont,2]<-sum\n")
-	plotstep.write("        pcont<-pcont+1\n")
-	plotstep.write("      }else{\n")
-	plotstep.write("        negative[ncont,1]<-as.character(contig)\n")
-	plotstep.write("        negative[ncont,2]<-sum\n")
-	plotstep.write("        ncont<-ncont+1\n")	
-	plotstep.write("      }\n")
-	plotstep.write("      contig<-gcdata[\"V1\"][i,]\n")
-	plotstep.write("      sum<-0\n")
-	plotstep.write("      sum<-sum+gcdata[\"V5\"][i,]\n")
-	plotstep.write("    }\n")
-	plotstep.write("  }\n")
-	plotstep.write("  if(sum>0){\n")
-	plotstep.write("    positive[pcont,1]<-as.character(contig)\n")
-	plotstep.write("    positive[pcont,2]<-sum\n")
-	plotstep.write("  }else{\n")
-	plotstep.write("    negative[ncont,1]<-as.character(contig)\n")
-	plotstep.write("    negative[ncont,2]<-sum\n")
-	plotstep.write("  }\n")
-	plotstep.write("  positive<-positive[order(positive$value),]\n")    
-	plotstep.write("  negative<-negative[order(negative$value),]\n")
-	plotstep.write("  if(nrow(positive>1)){\n")
-	plotstep.write("    if(nrow(negative)>1){\n")
-	plotstep.write("      newcontig<-rbind(positive,negative)\n")
-	plotstep.write("    }else{\n")
-	plotstep.write("      newcontig<-positive\n")
-	plotstep.write("    }\n")
-	plotstep.write("  }else{\n")
-	plotstep.write("    if(nrow(negative)>1){\n")
-	plotstep.write("      newcontig<-negative\n")
-	plotstep.write("    }\n")
-	plotstep.write("  }\n")
-	plotstep.write("    for(i in seq(1:nrow(newcontig))){\n")
-	plotstep.write("      tmp<-data[i,]\n")
-	plotstep.write("      data[i,]<-data[row<-which(data == as.character(newcontig[\"name\"][i,])),]\n")
-	plotstep.write("      data[row,]<-tmp\n")
-	plotstep.write("    }\n")
-	plotstep.write("}\n")
-	plotstep.write("data[\"V5\"]<-data[\"V4\"]<-1\n")
-	plotstep.write("colnames(data)<- c(\"chr\", \"start\", \"end\",\"V4\",\"V5\")\n")
-	plotstep.write("colnames(rnadata)<- c(\"Gene\", \"start\", \"end\",\"Contig\",\"color\")\n")
-	plotstep.write("colnames(fdata)<-c(\"Gene\",\"start\",\"end\",\"Contig\",\"Cog\")\n")
-	plotstep.write("colnames(rdata)<-c(\"Gene\",\"start\",\"end\",\"Contig\",\"Cog\")\n")
-	plotstep.write("colnames(gcdata)<-c(\"Contig\",\"start\",\"end\",\"gccontent\",\"gcskew\")\n")
-	plotstep.write("tocirmeasure<-segAnglePo(measure, seg=c(as.matrix(measure[\"seg.name\"][,])))\n")
-	plotstep.write("tocirmeasure[2,2]<-300;tocirmeasure[2,3]<-620\n")
-	plotstep.write("tocirmeasure[3,2]<-0;tocirmeasure[3,3]<-620\n")
-	plotstep.write("tocirmeasure[4,2]<-420;tocirmeasure[4,3]<-620\n")
-	plotstep.write("tocirmeasure[5,2]<-90;tocirmeasure[5,3]<-620\n")
-	plotstep.write("tocirmeasure[6,2]<-120;tocirmeasure[6,3]<-620\n")
-	plotstep.write("tocirmeasure[7,2]<-180;tocirmeasure[7,3]<-620\n")
-	plotstep.write("tocirmeasure[8,2]<-240;tocirmeasure[8,3]<-620\n")
-	plotstep.write("tocirmeasure2<-segAnglePo(measure2, seg=c(as.matrix(measure2[\"seg.name\"][,])))\n")
-	plotstep.write("tocirmeasure2[1,2]<-330\n")
-	plotstep.write("tocirmeasure4<-segAnglePo(measure4, seg=c(as.matrix(measure4[\"seg.name\"][,])))\n")
-	plotstep.write("tocirmeasure4[1,2]<-395\n")
-	plotstep.write("tocirmeasure8<-segAnglePo(measure8, seg=c(as.matrix(measure8[\"seg.name\"][,])))\n")
-	plotstep.write("tocirmeasure8[1,2]<-146\n")
-	plotstep.write("tocirmeasure10<-segAnglePo(measure10, seg=c(as.matrix(measure10[\"seg.name\"][,])))\n")
-	plotstep.write("tocirmeasure10[1,2]<-210\n")									
-	plotstep.write("tocir <- segAnglePo(data, seg=c(as.matrix(data[\"chr\"][,])))\n")	
-	plotstep.write("tocirf<-segAnglePo(fdata, seg=c(as.matrix(fdata[\"Gene\"][,])))\n")	
-	plotstep.write("tocirr<-segAnglePo(rdata, seg=c(as.matrix(rdata[\"Gene\"][,])))\n")	
-	plotstep.write("tocirrna<-segAnglePo(rnadata, seg=c(as.matrix(rnadata[\"Gene\"][,])))\n")	
-	plotstep.write("tocirgc<-segAnglePo(gcdata, seg=c(as.matrix(gcdata[\"Contig\"][,])))\n")	
-	plotstep.write("getl<-function (contig) {\n")	
-	plotstep.write("  row<-which(data == as.character(contig))\n")	
-	plotstep.write("  return(as.numeric(data[\"end\"][row,]))\n")	
-	plotstep.write("}\n")	
-	plotstep.write("getal<-function (contig) {\n")	
-	plotstep.write("  row<-which(tocir == as.character(contig))\n")	
-	plotstep.write("  return(as.numeric(tocir[row,3]) -  as.numeric(tocir[row,2]))\n")	
-	plotstep.write("}\n")	
-	plotstep.write("getsa<-function (contig) {\n")	
-	plotstep.write("  row<-which(tocir == as.character(contig))\n")	
-	plotstep.write("  return(as.numeric(tocir[row,2]))\n")	
-	plotstep.write("}\n")	
-	plotstep.write("for(i in seq(1:nrow(tocirf))){\n")	
-	plotstep.write("  tocirf[i,2]<-getsa(c(as.matrix(fdata[\"Contig\"][i,])))+(getal(fdata[\"Contig\"][i,])/getl(c(as.matrix(fdata[\"Contig\"][i,]))))*as.numeric(fdata[\"start\"][i,])\n")	
-	plotstep.write("  tocirf[i,3]<-getsa(fdata[\"Contig\"][i,])+(getal(fdata[\"Contig\"][i,])/getl(c(as.matrix(fdata[\"Contig\"][i,]))))*as.numeric(fdata[\"end\"][i,])\n")	
-	plotstep.write("  tocirf[i,1]<-paste(c(\"bar_\"),i,sep=\"\")\n")	
-	plotstep.write("}\n")	
-	plotstep.write("fdata[\"Gene\"]<-as.data.frame(tocirf[,1])\n")	
-	plotstep.write("for(i in seq(1:nrow(tocirr))){\n")	
-	plotstep.write("  tocirr[i,2]<-getsa(rdata[\"Contig\"][i,])+(getal(rdata[\"Contig\"][i,])/getl(c(as.matrix(rdata[\"Contig\"][i,]))))*as.numeric(rdata[\"start\"][i,])\n")		
-	plotstep.write("  tocirr[i,3]<-getsa(rdata[\"Contig\"][i,])+(getal(rdata[\"Contig\"][i,])/getl(c(as.matrix(rdata[\"Contig\"][i,]))))*as.numeric(rdata[\"end\"][i,])\n")		
-	plotstep.write("  tocirr[i,1]<-paste(c(\"bar_\"),i,sep=\"\")\n")		
-	plotstep.write("  }\n")		
-	plotstep.write("rdata[\"Gene\"]<-as.data.frame(tocirr[,1])\n")		
-	plotstep.write("for(i in seq(1:nrow(tocirrna))){\n")		
-	plotstep.write("  tocirrna[i,2]<-getsa(rnadata[\"Contig\"][i,])+(getal(rnadata[\"Contig\"][i,])/getl(c(as.matrix(rnadata[\"Contig\"][i,]))))*as.numeric(rnadata[\"start\"][i,])\n")	
-	plotstep.write("  tocirrna[i,3]<-getsa(rnadata[\"Contig\"][i,])+(getal(rnadata[\"Contig\"][i,])/getl(c(as.matrix(rnadata[\"Contig\"][i,]))))*as.numeric(rnadata[\"end\"][i,])\n")		
-	plotstep.write("  tocirrna[i,1]<-paste(c(\"bar_\"),i,sep=\"\")\n")		
-	plotstep.write("}\n")		
-	plotstep.write("rnadata[\"Gene\"]<-as.data.frame(tocirrna[,1])\n")		
-	plotstep.write("for(i in seq(1:nrow(tocirgc))){\n")		
-	plotstep.write("  tocirgc[i,2]<-getsa(gcdata[\"Contig\"][i,])+(getal(gcdata[\"Contig\"][i,])/getl(c(as.matrix(gcdata[\"Contig\"][i,]))))*as.numeric(gcdata[\"start\"][i,])\n")		
-	plotstep.write("  tocirgc[i,3]<-getsa(gcdata[\"Contig\"][i,])+(getal(gcdata[\"Contig\"][i,])/getl(c(as.matrix(gcdata[\"Contig\"][i,]))))*as.numeric(gcdata[\"end\"][i,])\n")		
-	plotstep.write("  tocirgc[i,6]<-gcdata[\"start\"][i,]\n")
-	plotstep.write("  tocirgc[i,7]<-gcdata[\"end\"][i,]\n")	
-	plotstep.write("  tocirgc[i,1]<-paste(c(\"bar_\"),i,sep=\"\")\n")	
-	plotstep.write("  }\n")	
-	plotstep.write("gcdata[\"Contig\"]<-as.data.frame(tocirgc[,1])\n")	
-	plotstep.write("if(makecog==c(\"Y\")){\n")	
-	plotstep.write("  getcolor<-function(type){\n")	
-	plotstep.write("    switch(as.character(type),\n")	
-	plotstep.write("           \"A\" = \"darkcyan\", \"B\" = \"sienna\", \"C\" = \"orange\", \"D\" = \"yellow\", \"E\" = \"green\",\n")	
-	plotstep.write("           \"F\" = \"pink\", \"G\" = \"steelblue\", \"H\" = \"purple\", \"I\" = \"brown\", \"J\" = \"violet\", \n")	
-	plotstep.write("           \"K\" = \"maroon\", \"L\" = \"gold\", \"M\" = \"dark green\", \"N\" = \"dark red\", \"O\" = \"dark blue\", \n")	
-	plotstep.write("           \"P\" = \"cyan\", \"Q\" = \"dark orange\", \"R\" = \"turquoise\", \"S\" = \"gray\", \"T\" = \"chocolate\",\n")	
-	plotstep.write("           \"U\" = \"beige\", \"V\" = \"yellowgreen\", \"W\" = \"dimgray\", \"Y\" = \"orangered\", \n")	
-	plotstep.write("           \"Z\" = \"dark cyan\")\n")	
-	plotstep.write("  }\n")	
-	plotstep.write("  fdata[\"V6\"]<-rdata[\"V6\"]<-1\n")	
-	plotstep.write("  for(i in seq(1:nrow(as.data.frame(fdata)))){\n")	
-	plotstep.write("    fdata[\"V6\"][i,]<-getcolor(fdata[\"Cog\"][i,])\n")	
-	plotstep.write("  }\n")	
-	plotstep.write("  for(i in seq(1:nrow(as.data.frame(rdata)))){\n")	
-	plotstep.write("    rdata[\"V6\"][i,]<-getcolor(rdata[\"Cog\"][i,])\n")	
-	plotstep.write("  }\n")	
-	plotstep.write("}\n")	
-	plotstep.write("mymedian<-median(gcdata$gccontent)\n")	
-	plotstep.write("pdf(file=\"Rplot.pdf\", width = 10, height =10)\n")	
-	plotstep.write("par(mar=c(2,2,2,2))\n")	
-	plotstep.write("plot(c(0,1000), c(0,1000), type=\"n\", axes=FALSE, xlab=\"\", ylab=\"\", main=\"\")\n")	
-	plotstep.write("if(nrow(data)>1){\n")	
-	plotstep.write("  circos(R=400, cir=tocir, W=10,type=\"chr\", print.chr.lab=F, scale=F)\n")	
-	plotstep.write("}\n")	
-	plotstep.write("if(makecog==c(\"Y\")){\n")	
-	plotstep.write("  circos(R=340, cir=tocirf, W=60, mapping=fdata, type=\"b3\", col.v=7, col=c(as.matrix(fdata[\"V6\"])), B=F,scale=F, lwd=abs(as.matrix((fdata[\"end\"]-fdata[\"start\"])/4000)))\n")	
-	plotstep.write("  circos(R=290, cir=tocirr, W=60, mapping=rdata, type=\"b3\", col.v=7, col=c(as.matrix(rdata[\"V6\"])), B=F,scale=F, lwd=abs(as.matrix((rdata[\"end\"]-rdata[\"start\"])/4000)))\n")	
-	plotstep.write("}else{\n")	
-	plotstep.write("  circos(R=340, cir=tocirf, W=60, mapping=fdata, type=\"b3\", col.v=7, col=c(\"dark green\"), B=F,scale=F, lwd=abs(as.matrix((fdata[\"end\"]-fdata[\"start\"])/4000)))\n")	
-	plotstep.write("  circos(R=290, cir=tocirr, W=60, mapping=rdata, type=\"b3\", col.v=7, col=c(\"dark red\"), B=F,scale=F, lwd=abs(as.matrix((rdata[\"end\"]-rdata[\"start\"])/4000)))\n")	
-	plotstep.write("}\n")	
-	plotstep.write("circos(R=250, cir=tocirrna, W=50, mapping=rnadata, type=\"b3\", col.v=6, col=c(as.matrix(rnadata[\"color\"])), B=F,scale=T, lwd=abs(as.matrix((rnadata[\"end\"]-rnadata[\"start\"])/4000)))\n")	
-	plotstep.write("circos(R=200, cir=tocirgc, W=30, mapping=gcdata, type=\"b\", col.v=4, col=ifelse(gcdata[\"gccontent\"]>=mymedian,c(\"black\"),c(\"white\")), B=F,scale=F, lwd=0.4)\n")	
-	plotstep.write("circos(R=200, cir=tocirgc, W=-30, mapping=gcdata, type=\"b\", col.v=4, col=ifelse(gcdata[\"gccontent\"]>=mymedian,c(\"white\"),c(\"gray\")), B=F,scale=F, lwd=0.4)\n")	
-	plotstep.write("circos(R=130, cir=tocirgc, W=40, mapping=gcdata, type=\"b\", col.v=5, col=ifelse(gcdata[\"gcskew\"]>0,c(\"green\"),c(\"white\")), B=F,scale=F, lwd=0.4)\n")	
-	plotstep.write("circos(R=130, cir=tocirgc, W=-40, mapping=gcdata, type=\"b\", col.v=5, col=ifelse(gcdata[\"gcskew\"]>0,c(\"white\"),c(\"purple\")), B=F,scale=F, lwd=0.4)\n")
-	plotstep.write("circos(R=62, cir=tocirmeasure, W=5, mapping=measure, type=\"b3\", col.v=4, col=c(\"gray\"), B=F, lwd=2)\n")
-	plotstep.write("circos(R=65, cir=tocirmeasure2, W=30, mapping=measure2, type=\"label2\", col.v=4, col=c(\"gray\"), B=F,scale=F, cex =0.5, side=\"out\")\n")	
-	plotstep.write("circos(R=65, cir=tocirmeasure4, W=30, mapping=measure4, type=\"label2\", col.v=4, col=c(\"gray\"), B=F,scale=F, cex =0.5, side=\"out\")\n")
-	plotstep.write("circos(R=65, cir=tocirmeasure8, W=30, mapping=measure8, type=\"label2\", col.v=4, col=c(\"gray\"), B=F,scale=F, cex =0.5, side=\"out\")\n")
-	plotstep.write("circos(R=65, cir=tocirmeasure10, W=30, mapping=measure10, type=\"label2\", col.v=4, col=c(\"gray\"), B=F,scale=F, cex =0.5, side=\"out\")\n")
-	plotstep.write("legend(370,420, text.col=c(\"gray\"), cex=0.6,legend=\"x Kb\", box.col=\"white\") ;\n")
-	plotstep.write("if(makecog== c(\"Y\")){\n")
-	plotstep.write("  legend(\"right\", legend = c(\"A \",\"B \", \"C \", \"D \", \"E \", \"F \",\"G \",\"H \", \"I \", \"J \", \"K \",\"L \",\"M \", \"N \",\"O \", \"P \",\"Q \",\n")
-	plotstep.write("                             \"R \",\"T \", \"U \",\"V \",\"W \", \"Y \",\"Z \",\"Unknown\",\"tRNA\",\"rRNA\", \"GC Content\",\"GC Skew +\",\"GC Skew -\"), \n")
-	plotstep.write("         ncol = 1,\n")
-	plotstep.write("         xpd = NA, cex = 0.8,  bty=\"n\",\n")
-	plotstep.write("         fill=c(\"darkcyan\",\"sienna\", \"orange\",\"yellow\",\"green\",\"pink\",\"steelblue\",\"purple\",\"brown\",\"violet\",\n")
-	plotstep.write("                \"maroon\",\"gold\",\"dark green\",\"dark red\",\"dark blue\",\"cyan\",\"dark orange\",\"turquoise\",\n")
-	plotstep.write("                \"chocolate\",\"beige\",\"yellowgreen\",\"dimgray\",\"orangered\",\"dark cyan\",\"gray\",\"red\",\"blue\",\"black\",\"purple\",\"green\"),\n")
-	plotstep.write("         border = c(\"white\"),\n")
-	plotstep.write("         title = \"COG Categories\") \n")
-	plotstep.write("}else{\n")
-	plotstep.write("  legend(\"right\", legend = c(\"Forward genes\",\"Reverse Genes\",\"tRNA\",\"rRNA\", \"GC Content\",\"GC Skew +\",\"GC Skew -\"), \n")
-	plotstep.write("         ncol = 1,\n")
-	plotstep.write("         xpd = NA, cex = 0.8,  bty=\"n\",\n")
-	plotstep.write("         fill=c(\"dark green\",\"dark red\",\"red\",\"blue\",\"black\",\"purple\",\"green\"),\n")
-	plotstep.write("         border = c(\"white\"))  \n")
-	plotstep.write("}\n")
-	plotstep.write("dev.off()\n")
+	plotstep.write("""rm(list=ls());
+library(Rsamtools)
+library(OmicCircos)
+library(data.table)
+args<-commandArgs()
+gl<-as.numeric(args[6])
+makecog<-c(args[7])
+measure<-data.frame(seg.name=seq(1:8), seg.start=seq(1:8), seg.end=seq(1:8)+1, seg.value=1)
+measure2<-data.frame(seg.name=1, seg.start=1, seg.end=signif(2*gl/12/1000), seg.value=round(2*gl/12/1000,0))
+measure4<-data.frame(seg.name=1, seg.start=1, seg.end=signif(4*gl/12/1000), seg.value=round(4*gl/12/1000,0))
+measure8<-data.frame(seg.name=1, seg.start=1, seg.end=signif(8*gl/12/1000), seg.value=round(8*gl/12/1000,0))
+measure10<-data.frame(seg.name=1, seg.start=1, seg.end=signif(10*gl/12/1000), seg.value=round(10*gl/12/1000,0))
+measure["V5"]<-measure2["V5"]<-measure4["V5"]<-measure8["V5"]<-measure10["V5"]<-1
+data<-read.table("contigplot.dat",header=F)
+fdata<-read.table("forwardplot.dat",header=F)
+rdata<-read.table("reverseplot.dat",header=F)
+rnadata<-read.table("rna.dat",header=F)
+gcdata<-read.table("gcskewplot.dat",header=F)
+if(nrow(data)>1){
+  contig<-gcdata["V1"][1,]
+  sum<-0
+  positive<-data.frame(name=1, value=1)
+  negative<-data.frame(name=1, value=1)
+  pcont=1
+  ncont=1
+  for(i in seq(1:nrow(gcdata))){
+    if(contig==gcdata["V1"][i,]){
+      sum<-sum+gcdata["V5"][i,]
+    }else{
+      if(sum>0){
+        positive[pcont,1]<-as.character(contig)
+        positive[pcont,2]<-sum
+        pcont<-pcont+1
+      }else{
+        negative[ncont,1]<-as.character(contig)
+        negative[ncont,2]<-sum
+        ncont<-ncont+1
+      }
+      contig<-gcdata["V1"][i,]
+      sum<-0
+      sum<-sum+gcdata["V5"][i,]
+    }
+  }
+  if(sum>0){
+    positive[pcont,1]<-as.character(contig)
+    positive[pcont,2]<-sum
+  }else{
+    negative[ncont,1]<-as.character(contig)
+    negative[ncont,2]<-sum
+  }
+  positive<-positive[order(positive$value),]
+  negative<-negative[order(negative$value),]
+  if(nrow(positive>1)){
+    if(nrow(negative)>1){
+      newcontig<-rbind(positive,negative)
+    }else{
+      newcontig<-positive
+    }
+  }else{
+    if(nrow(negative)>1){
+      newcontig<-negative
+    }
+  }
+    for(i in seq(1:nrow(newcontig))){
+      tmp<-data[i,]
+      data[i,]<-data[row<-which(data == as.character(newcontig["name"][i,])),]
+      data[row,]<-tmp
+    }
+}
+data["V5"]<-data["V4"]<-1
+colnames(data)<- c("chr", "start", "end","V4","V5")
+colnames(rnadata)<- c("Gene", "start", "end","Contig","color")
+colnames(fdata)<-c("Gene","start","end","Contig","Cog")
+colnames(rdata)<-c("Gene","start","end","Contig","Cog")
+colnames(gcdata)<-c("Contig","start","end","gccontent","gcskew")
+tocirmeasure<-segAnglePo(measure, seg=c(as.matrix(measure["seg.name"][,])))
+tocirmeasure[2,2]<-300;tocirmeasure[2,3]<-620
+tocirmeasure[3,2]<-0;tocirmeasure[3,3]<-620
+tocirmeasure[4,2]<-420;tocirmeasure[4,3]<-620
+tocirmeasure[5,2]<-90;tocirmeasure[5,3]<-620
+tocirmeasure[6,2]<-120;tocirmeasure[6,3]<-620
+tocirmeasure[7,2]<-180;tocirmeasure[7,3]<-620
+tocirmeasure[8,2]<-240;tocirmeasure[8,3]<-620
+tocirmeasure2<-segAnglePo(measure2, seg=c(as.matrix(measure2["seg.name"][,])))
+tocirmeasure2[1,2]<-330
+tocirmeasure4<-segAnglePo(measure4, seg=c(as.matrix(measure4["seg.name"][,])))
+tocirmeasure4[1,2]<-395
+tocirmeasure8<-segAnglePo(measure8, seg=c(as.matrix(measure8["seg.name"][,])))
+tocirmeasure8[1,2]<-146
+tocirmeasure10<-segAnglePo(measure10, seg=c(as.matrix(measure10["seg.name"][,])))
+tocirmeasure10[1,2]<-210
+tocir <- segAnglePo(data, seg=c(as.matrix(data["chr"][,])))
+tocirf<-segAnglePo(fdata, seg=c(as.matrix(fdata["Gene"][,])))
+tocirr<-segAnglePo(rdata, seg=c(as.matrix(rdata["Gene"][,])))
+tocirrna<-segAnglePo(rnadata, seg=c(as.matrix(rnadata["Gene"][,])))
+tocirgc<-segAnglePo(gcdata, seg=c(as.matrix(gcdata["Contig"][,])))
+getl<-function (contig) {
+  row<-which(data == as.character(contig))
+  return(as.numeric(data["end"][row,]))
+}
+getal<-function (contig) {
+  row<-which(tocir == as.character(contig))
+  return(as.numeric(tocir[row,3]) -  as.numeric(tocir[row,2]))
+}
+getsa<-function (contig) {
+  row<-which(tocir == as.character(contig))
+  return(as.numeric(tocir[row,2]))
+}
+for(i in seq(1:nrow(tocirf))){
+  tocirf[i,2]<-getsa(c(as.matrix(fdata["Contig"][i,])))+(getal(fdata["Contig"][i,])/getl(c(as.matrix(fdata["Contig"][i,]))))*as.numeric(fdata["start"][i,])
+  tocirf[i,3]<-getsa(fdata["Contig"][i,])+(getal(fdata["Contig"][i,])/getl(c(as.matrix(fdata["Contig"][i,]))))*as.numeric(fdata["end"][i,])
+  tocirf[i,1]<-paste(c("bar_"),i,sep="")
+}
+fdata["Gene"]<-as.data.frame(tocirf[,1])
+for(i in seq(1:nrow(tocirr))){
+  tocirr[i,2]<-getsa(rdata["Contig"][i,])+(getal(rdata["Contig"][i,])/getl(c(as.matrix(rdata["Contig"][i,]))))*as.numeric(rdata["start"][i,])
+  tocirr[i,3]<-getsa(rdata["Contig"][i,])+(getal(rdata["Contig"][i,])/getl(c(as.matrix(rdata["Contig"][i,]))))*as.numeric(rdata["end"][i,])
+  tocirr[i,1]<-paste(c("bar_"),i,sep="")
+  }
+rdata["Gene"]<-as.data.frame(tocirr[,1])
+for(i in seq(1:nrow(tocirrna))){
+  tocirrna[i,2]<-getsa(rnadata["Contig"][i,])+(getal(rnadata["Contig"][i,])/getl(c(as.matrix(rnadata["Contig"][i,]))))*as.numeric(rnadata["start"][i,])
+  tocirrna[i,3]<-getsa(rnadata["Contig"][i,])+(getal(rnadata["Contig"][i,])/getl(c(as.matrix(rnadata["Contig"][i,]))))*as.numeric(rnadata["end"][i,])
+  tocirrna[i,1]<-paste(c("bar_"),i,sep="")
+}
+rnadata["Gene"]<-as.data.frame(tocirrna[,1])
+for(i in seq(1:nrow(tocirgc))){
+  tocirgc[i,2]<-getsa(gcdata["Contig"][i,])+(getal(gcdata["Contig"][i,])/getl(c(as.matrix(gcdata["Contig"][i,]))))*as.numeric(gcdata["start"][i,])
+  tocirgc[i,3]<-getsa(gcdata["Contig"][i,])+(getal(gcdata["Contig"][i,])/getl(c(as.matrix(gcdata["Contig"][i,]))))*as.numeric(gcdata["end"][i,])
+  tocirgc[i,6]<-gcdata["start"][i,]
+  tocirgc[i,7]<-gcdata["end"][i,]
+  tocirgc[i,1]<-paste(c("bar_"),i,sep="")
+  }
+gcdata["Contig"]<-as.data.frame(tocirgc[,1])
+if(makecog==c("Y")){
+  colorlist<-list( "A" = "darkcyan", "B" = "sienna", "C" = "orange", "D" = "yellow", "E" = "green",
+                   "F" = "pink", "G" = "steelblue", "H" = "purple", "I" = "brown", "J" = "violet", 
+                   "K" = "maroon", "L" = "gold", "M" = "dark green", "N" = "dark red", "O" = "dark blue", 
+                   "P" = "cyan", "Q" = "dark orange", "R" = "turquoise", "S" = "dark violet", "T" = "chocolate",
+                   "U" = "beige", "V" = "yellowgreen", "W" = "dimgray", "X" = "gray" ,"Y" = "orangered", 
+                   "Z" = "dark cyan")
+  
+  fdata["V6"]<-rdata["V6"]<-1
+  fdata["V6"]<-as.character(colorlist[c(as.matrix(fdata["Cog"]))])
+  rdata["V6"]<-as.character(colorlist[c(as.matrix(rdata["Cog"]))])
+}
+mymedian<-median(gcdata$gccontent)
+pdf(file="Rplot.pdf", width = 10, height =10)
+par(mar=c(2,2,2,2))
+plot(c(0,1000), c(0,1000), type="n", axes=FALSE, xlab="", ylab="", main="")
+if(nrow(data)>1){
+  circos(R=400, cir=tocir, W=10,type="chr", print.chr.lab=F, scale=F)
+}
+if(makecog==c("Y")){
+  circos(R=340, cir=tocirf, W=60, mapping=fdata, type="b3", col.v=7, col=c(as.matrix(fdata["V6"])), B=F,scale=F, lwd=abs(as.matrix((fdata["end"]-fdata["start"])/4000)))
+  circos(R=290, cir=tocirr, W=60, mapping=rdata, type="b3", col.v=7, col=c(as.matrix(rdata["V6"])), B=F,scale=F, lwd=abs(as.matrix((rdata["end"]-rdata["start"])/4000)))
+}else{
+  circos(R=340, cir=tocirf, W=60, mapping=fdata, type="b3", col.v=7, col=c("dark green"), B=F,scale=F, lwd=abs(as.matrix((fdata["end"]-fdata["start"])/4000)))
+  circos(R=290, cir=tocirr, W=60, mapping=rdata, type="b3", col.v=7, col=c("dark red"), B=F,scale=F, lwd=abs(as.matrix((rdata["end"]-rdata["start"])/4000)))
+}
+circos(R=250, cir=tocirrna, W=50, mapping=rnadata, type="b3", col.v=6, col=c(as.matrix(rnadata["color"])), B=F,scale=T, lwd=abs(as.matrix((rnadata["end"]-rnadata["start"])/4000)))
+circos(R=200, cir=tocirgc, W=30, mapping=gcdata, type="b", col.v=4, col=ifelse(gcdata["gccontent"]>=mymedian,c("black"),c("white")), B=F,scale=F, lwd=0.4)
+circos(R=200, cir=tocirgc, W=-30, mapping=gcdata, type="b", col.v=4, col=ifelse(gcdata["gccontent"]>=mymedian,c("white"),c("gray")), B=F,scale=F, lwd=0.4)
+circos(R=130, cir=tocirgc, W=40, mapping=gcdata, type="b", col.v=5, col=ifelse(gcdata["gcskew"]>0,c("green"),c("white")), B=F,scale=F, lwd=0.4)
+circos(R=130, cir=tocirgc, W=-40, mapping=gcdata, type="b", col.v=5, col=ifelse(gcdata["gcskew"]>0,c("white"),c("purple")), B=F,scale=F, lwd=0.4)
+circos(R=62, cir=tocirmeasure, W=5, mapping=measure, type="b3", col.v=4, col=c("gray"), B=F, lwd=2)
+circos(R=65, cir=tocirmeasure2, W=30, mapping=measure2, type="label2", col.v=4, col=c("gray"), B=F,scale=F, cex =0.5, side="out")
+circos(R=65, cir=tocirmeasure4, W=30, mapping=measure4, type="label2", col.v=4, col=c("gray"), B=F,scale=F, cex =0.5, side="out")
+circos(R=65, cir=tocirmeasure8, W=30, mapping=measure8, type="label2", col.v=4, col=c("gray"), B=F,scale=F, cex =0.5, side="out")
+circos(R=65, cir=tocirmeasure10, W=30, mapping=measure10, type="label2", col.v=4, col=c("gray"), B=F,scale=F, cex =0.5, side="out")
+legend(350,420, text.col=c("gray"), cex=0.6,legend="x Kb", box.col="white") ;
+if(makecog== c("Y")){
+  code<-c("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+  cogletters<-rbind(fdata["Cog"],rdata["Cog"])
+  letters<-ifelse(code %in% c(as.matrix(cogletters)),code,FALSE)
+  letters<-letters[which(letters != FALSE)]
+  lcolors<-as.character(colorlist[c(as.matrix(letters))])
+  
+  legend("right", legend = c(letters, "tRNA","rRNA", "GC Content","GC Skew +","GC Skew -"), 
+         ncol = 1,
+         xpd = NA, cex = 0.8,  bty="n",
+         fill=c(lcolors,"red","blue","black","purple","green"),
+         border = c("white"),
+         title = "COG Categories") 
+}else{
+  legend("right", legend = c("Forward genes","Reverse Genes","tRNA","rRNA", "GC Content","GC Skew +","GC Skew -"), 
+         ncol = 1,
+         xpd = NA, cex = 0.8,  bty="n",
+         fill=c("dark green","dark red","red","blue","black","purple","green"),
+         border = c("white"))  
+}
+dev.off()
+""")
 
 	plotstep.close
 
@@ -253,10 +251,10 @@ def MakeCog(gbk):
 	faa.close
 	return str(gbkname + ".faa")
 
-def callRPSBlast(faafile):
+def callRPSBlast(faafile,threads):
 	faaname=faafile.replace("/"," ").split()[len(faafile.replace("/"," ").split())-1]
 	if os.path.isfile(str("rpsblast."+faaname+".out")) == False:
-		subprocess.call(["data/rpsblast", "-query", faafile, "-db", "data/Cog_LE/Cog", "-out", str("rpsblast."+faaname+".out"), "-evalue", "1e-2", "-outfmt", "6", "-num_threads",str(multiprocessing.cpu_count())])
+		subprocess.call(["data/rpsblast", "-query", faafile, "-db", "data/Cog_LE/Cog", "-out", str("rpsblast."+faaname+".out"), "-evalue", "1e-2", "-outfmt", "6", "-num_threads",str(threads)])
 	
 	subprocess.call(["rm","-rf",str("results_"+faaname)])
 	subprocess.call(["perl", "data/cdd2cog.pl", "-r", str("rpsblast."+faaname+".out"), "-c","data/cddid.tbl","-f", "data/fun.txt" ,"-w", "data/whog", "-a"])
@@ -264,7 +262,6 @@ def callRPSBlast(faafile):
 	subprocess.call(["mv",str(faaname),str("results_"+faaname)])
 
 	os.chdir(str("results_"+faaname))
-
 	parsedcog= open("parsedcog.dat", 'w')
 	with open("rps-blast_cog.txt") as tsv:
 		rpsblastout=csv.reader(tsv, delimiter="\t")
@@ -440,6 +437,8 @@ def main():
 	parser.add_option("-f","--file",dest="filename",help="Input Fasta format file",metavar="GENBANK FILE")
 	parser.add_option("-w","--window",dest="window",help="default:3000, window to take for gccontent and gc skew",default=3000)
 	parser.add_option("-s","--step",dest="step",help="default:1500 step to move your window",default=1500)
+	parser.add_option("-t","--threads",dest="threads",help="default:1 threads for rpsblast",default=1)
+
 
 	(options,args) = parser.parse_args()
 
@@ -448,13 +447,14 @@ def main():
 	genbank_file = options.filename
 	window = options.window
 	step = options.step
+	threads=options.threads
 	gbkname=genbank_file.replace("/"," ").split()[len(genbank_file.replace("/"," ").split())-1]
 
 
 	if makecog == "Y":
 		print "Making cog assign"
 		faafile=MakeCog(genbank_file)
-		callRPSBlast(faafile)
+		callRPSBlast(faafile,threads)
 	else:
 		resultsfolder=str("results_"+gbkname+".faa")
 		subprocess.call(["rm","-rf",str("results_"+gbkname+".faa")])
