@@ -445,9 +445,9 @@ def main():
 	makecog = options.cogoption
 	filterc= options.filterc
 	genbank_file = options.filename
-	window = options.window
-	step = options.step
-	threads=options.threads
+	window = int(options.window)
+	step = int(options.step)
+	threads = int(options.threads)
 	gbkname=genbank_file.replace("/"," ").split()[len(genbank_file.replace("/"," ").split())-1]
 
 
