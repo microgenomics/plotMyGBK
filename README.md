@@ -50,4 +50,4 @@ Since your gbk, plotMyGBK will generate a folder called results\_GBKNAME.faa whe
   1.8.1.
 
 ##Warning
-* The script will plot at least all contigs with genes, this is ideal for prokaryotes gbk where are some contigs (~100), but when you plot more than five hundred contgis, maybe will not look nicely.
+* The script will plot at least all contigs with genes, this is ideal for prokaryotes gbk where are some contigs (~100 or less), but when you plot five hundred or more contgis, maybe will not look nicely.
