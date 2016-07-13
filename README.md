@@ -48,3 +48,6 @@ Since your gbk, plotMyGBK will generate a folder called results\_GBKNAME.faa whe
 * Marchler-Bauer A, Anderson JB, DeWeese-Scott C, Fedorova ND, Geer LY, He S, Hurwitz DI, Jackson JD, Jacobs AR, Lanczycki CJ, Lie- bert CA, Liu C, Madej T, Marchler GH, Mazumder R, Nikolskaya AN, Panchenko AR, Rao BS, Shoemaker BA, Simonyan V, Song JS, Thiessen PA, Vasudevan S, Wang Y, Yamashita RA, Yin JJ, Bryant SH: CDD: a curated Entrez database of conserved domain alignments. Nucleic Acids Res 2003, 31:383-387
 * Ying Hu Chunhua Yan <yanch@mail.nih.gov> (2015). OmicCircos: High-quality circular visualization of omics data. R package version
   1.8.1.
+
+##Warning
+* The script will plot at least all contigs with genes, this is ideal for prokaryotes gbk where are some contigs (~100), but when you plot more than five hundred contgis, maybe will not look nicely.
