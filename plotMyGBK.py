@@ -432,12 +432,12 @@ def GCcalc(filename,window,step,filteredcontigs):
 
 def main():
 	parser = OptionParser(usage = "Usage: python plotMyGBK.py -f genbankfile.gbk")
-	parser.add_option("-C","--CogAssign",dest="cogoption",help="default:N, Y or N assign cog function by rpsblast", default="N")
-	parser.add_option("-F","--FilterContigs",dest="filterc",help="default:Y, show only contigs that contains genes",default="Y")
-	parser.add_option("-f","--file",dest="filename",help="Input Fasta format file",metavar="GENBANK FILE")
-	parser.add_option("-w","--window",dest="window",help="default:3000, window to take for gccontent and gc skew",default=3000)
-	parser.add_option("-s","--step",dest="step",help="default:1500 step to move your window",default=1500)
-	parser.add_option("-t","--threads",dest="threads",help="default:1 threads for rpsblast",default=1)
+	parser.add_option("-C","--CogAssign",dest="character",help="default:N, Y or N assign cog function by rpsblast", default="N")
+	parser.add_option("-F","--FilterContigs",dest="character",help="default:Y, show only contigs that contains genes",default="Y")
+	parser.add_option("-f","--file",dest="file",help="Input Fasta format file",metavar="GENBANK FILE")
+	parser.add_option("-w","--window",dest="int",help="default:3000, window to take for gccontent and gc skew",default=3000)
+	parser.add_option("-s","--step",dest="int",help="default:1500 step to move your window",default=1500)
+	parser.add_option("-t","--threads",dest="int",help="default:1 threads for rpsblast",default=1)
 
 
 	(options,args) = parser.parse_args()
