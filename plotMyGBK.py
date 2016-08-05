@@ -431,7 +431,7 @@ def GCcalc(filename,window,step,filteredcontigs):
 		filterc.close
 
 def main():
-	parser = OptionParser(usage = "Usage: python wrapper.py -f genbankfile.gbk")
+	parser = OptionParser(usage = "Usage: python plotMyGBK.py -f genbankfile.gbk")
 	parser.add_option("-C","--CogAssign",dest="cogoption",help="default:N, Y or N assign cog function by rpsblast", default="N")
 	parser.add_option("-F","--FilterContigs",dest="filterc",help="default:Y, show only contigs that contains genes",default="Y")
 	parser.add_option("-f","--file",dest="filename",help="Input Fasta format file",metavar="GENBANK FILE")
