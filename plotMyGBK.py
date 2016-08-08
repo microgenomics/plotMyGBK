@@ -254,7 +254,7 @@ def MakeCog(gbk):
 def callRPSBlast(faafile,threads):
 	faaname=faafile.replace("/"," ").split()[len(faafile.replace("/"," ").split())-1]
 	if os.path.isfile(str("rpsblast."+faaname+".out")) == False:
-		subprocess.call(["data/rpsblast", "-query", faafile, "-db", "data/Cog_LE/Cog", "-out", str("rpsblast."+faaname+".out"), "-evalue", "1e-2", "-outfmt", "6", "-num_threads",str(threads)])
+		subprocess.call(["data/rpsblast", "-query", faafile, "-db", "data/Cog_LE/Cog", "-out", str("rpsblast."+faaname+".out"), "-evalue", "1e-3", "-outfmt", "6", "-num_threads",str(threads)])
 	
 	subprocess.call(["rm","-rf",str("results_"+faaname)])
 	subprocess.call(["perl", "data/cdd2cog.pl", "-r", str("rpsblast."+faaname+".out"), "-c","data/cddid.tbl","-f", "data/fun.txt" ,"-w", "data/whog", "-a"])
