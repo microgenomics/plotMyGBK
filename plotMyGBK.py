@@ -323,23 +323,26 @@ def GBKParser(genbank_file, makecog, filterc):
 			locations=feat.location.split()
 			gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
 
-			if makecog=="Y":
-				cog=getCog(gene)
-				contigband=1
-				if locations[2]=="+":
-					forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
-					forward.write("\n")
+			if "join" not in str(feat.location):
+				if makecog=="Y":
+					cog=getCog(gene)
+					contigband=1
+					if locations[2]=="+":
+						forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
+						forward.write("\n")
+					else:
+						reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
+						reverse.write("\n")
 				else:
-					reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
-					reverse.write("\n")
+					contigband=1
+					if locations[2]=="+":
+						forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "E"))  #just for color
+						forward.write("\n")
+					else:
+						reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "M"))  #just for color
+						reverse.write("\n")
 			else:
-				contigband=1
-				if locations[2]=="+":
-					forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "E"))  #just for color
-					forward.write("\n")
-				else:
-					reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "M"))  #just for color
-					reverse.write("\n")
+				print "Warning: Join present, not possible to parse gene:",gene
 
 		rrnafeats = [feat for feat in rec.features if feat.type == "rRNA"]
 		for feat in rrnafeats:
