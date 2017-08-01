@@ -301,7 +301,7 @@ def getCog(genename):
 		toplot.close
 		return cog
 
-def GBKParser(genbank_file, makecog, filterc):
+def GBKParser(genbank_file, makecog, filterc, clength):
 	gbkname=genbank_file.replace("/"," ").split()[len(genbank_file.replace("/"," ").split())-1]
 	fna=open(str(gbkname+".fna"), 'w')
 	contig=open("contigplot.dat", 'w')#only contgis that contains genes
@@ -315,66 +315,67 @@ def GBKParser(genbank_file, makecog, filterc):
 		contigname=rec[0:].id
 		contiglen=len(rec[0:].seq)
 		contigseq=rec[0:].seq
-		genomelength+=contiglen
 		contigband=0
-		feats = [feat for feat in rec.features if feat.type == "CDS"]
-		for feat in feats:
-			feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
-			locations=feat.location.split()
-			gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
-
-			if "join" not in str(feat.location):
-				if makecog=="Y":
-					cog=getCog(gene)
-					contigband=1
-					if locations[2]=="+":
-						forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
-						forward.write("\n")
+		if contiglen>clength:
+			genomelength+=contiglen
+			feats = [feat for feat in rec.features if feat.type == "CDS"]
+			for feat in feats:
+				feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
+				locations=feat.location.split()
+				gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
+	
+				if "join" not in str(feat.location):
+					if makecog=="Y":
+						cog=getCog(gene)
+						contigband=1
+						if locations[2]=="+":
+							forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
+							forward.write("\n")
+						else:
+							reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
+							reverse.write("\n")
 					else:
-						reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, cog))  #gene, start, end, contig
-						reverse.write("\n")
+						contigband=1
+						if locations[2]=="+":
+							forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "E"))  #just for color
+							forward.write("\n")
+						else:
+							reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "M"))  #just for color
+							reverse.write("\n")
 				else:
-					contigband=1
-					if locations[2]=="+":
-						forward.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "E"))  #just for color
-						forward.write("\n")
-					else:
-						reverse.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "M"))  #just for color
-						reverse.write("\n")
+					print "Warning: Join present, not possible to parse gene:",gene
+	
+			rrnafeats = [feat for feat in rec.features if feat.type == "rRNA"]
+			for feat in rrnafeats:
+				feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
+				locations=feat.location.split()
+				gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
+				
+	
+				contigband=1
+				rna.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "blue"))  #gene, start, end, contig
+				rna.write("\n")
+	
+			trnafeats = [feat for feat in rec.features if feat.type == "tRNA"]
+			for feat in trnafeats:
+				feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
+				locations=feat.location.split()
+				gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
+				
+				contigband=1
+				rna.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "red"))  #gene, start, end, contig
+				rna.write("\n")
+	
+			if filterc == "Y":
+				if contigband==1:
+					contig.write(str(contigname+" "+"1 "+str(contiglen)))
+					contig.write("\n")
 			else:
-				print "Warning: Join present, not possible to parse gene:",gene
-
-		rrnafeats = [feat for feat in rec.features if feat.type == "rRNA"]
-		for feat in rrnafeats:
-			feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
-			locations=feat.location.split()
-			gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
-			
-
-			contigband=1
-			rna.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "blue"))  #gene, start, end, contig
-			rna.write("\n")
-
-		trnafeats = [feat for feat in rec.features if feat.type == "tRNA"]
-		for feat in trnafeats:
-			feat.location=str(feat.location).replace("("," ").replace(")","").replace("]","").replace("[","").replace(">","").replace("<","").replace(":"," ")
-			locations=feat.location.split()
-			gene=str(feat.qualifiers["locus_tag"]).replace("'","").replace("[","").replace("]","")
-			
-			contigband=1
-			rna.write("%s %s %s %s %s" % (gene, int(locations[0])+1, int(locations[1])+1, contigname, "red"))  #gene, start, end, contig
-			rna.write("\n")
-
-		if filterc == "Y":
-			if contigband==1:
 				contig.write(str(contigname+" "+"1 "+str(contiglen)))
 				contig.write("\n")
-		else:
-			contig.write(str(contigname+" "+"1 "+str(contiglen)))
-			contig.write("\n")
-
-		fna.write(">%s \n" % (contigname))
-		fna.write("%s\n" % (contigseq))
+	
+			fna.write(">%s \n" % (contigname))
+			fna.write("%s\n" % (contigseq))
 
 
 
@@ -437,6 +438,7 @@ def main():
 	parser = OptionParser(usage = "Usage: python wrapper.py -f genbankfile.gbk")
 	parser.add_option("-C","--CogAssign",dest="cogoption",help="default:N, Y or N assign cog function by rpsblast", default="N")
 	parser.add_option("-F","--FilterContigs",dest="filterc",help="default:Y, show only contigs that contains genes",default="Y")
+	parser.add_option("-l","--cLength",dest="clength",help="default:200 filter contigs with less than X bp",default=200)
 	parser.add_option("-f","--file",dest="filename",help="Input Fasta format file",metavar="GENBANK FILE")
 	parser.add_option("-w","--window",dest="window",help="default:3000, window to take for gccontent and gc skew",default=3000)
 	parser.add_option("-s","--step",dest="step",help="default:1500 step to move your window",default=1500)
@@ -452,6 +454,7 @@ def main():
 	step = int(options.step)
 	threads = int(options.threads)
 	gbkname=genbank_file.replace("/"," ").split()[len(genbank_file.replace("/"," ").split())-1]
+	clength=int(options.clength)
 
 
 	if makecog == "Y":
@@ -465,7 +468,8 @@ def main():
 		os.chdir(resultsfolder)
 
 	print "Parsing GBK"
-	gl=GBKParser(genbank_file, makecog, filterc)
+	gl=GBKParser(genbank_file, makecog, filterc, clength)
+	print "Genome length: ", gl
 	print "Computing GC content and GC Skew +/-"
 	GCcalc(str(gbkname+".fna"),window,step,"contigplot.dat")
 	print "Plotting"
