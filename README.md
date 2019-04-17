@@ -11,11 +11,6 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 	* [OmicCircos](http://bioconductor.org/packages/release/bioc/html/OmicCircos.html)
 	* [data.table](https://cran.r-project.org/web/packages/data.table/index.html)
 
-## Installation
-
-* Download the zip from [here](https://www.dropbox.com/s/n6ycyhrtlz3ixeb/data.zip?dl=0), unzip into PlotMyGBK folder, only if you want to classify your genes by functions (-C flag). This package have all neccesary files to classify your genes using the COG Assignments.
-* Download the script from [this repository](https://github.com/microgenomics/plotMyGBK/archive/master.zip) and put them together with data folder that you unzipped previously.
-
 ## Usage
 
 plotMyGBK have minimal use:
