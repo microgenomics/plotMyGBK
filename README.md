@@ -3,6 +3,10 @@
 
 plotMyGBK is a very simple to use pipe that use a genbank file and give you a nice circular graph (using omiccircos to make the graph)
 
+# Output example
+
+![outputexample](example/putida.pdf)
+
 ## Requisites
 
 * Python 2.7 with the module [Biopython](http://biopython.org/wiki/Download)
