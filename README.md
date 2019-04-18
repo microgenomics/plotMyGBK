@@ -9,7 +9,7 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 
 ## Requisites
 
-* Python 2.7 with the module [Biopython](http://biopython.org/wiki/Download)
+* Python 2.7 with [biopython](http://biopython.org/wiki/Download) and [pandas](https://pandas.pydata.org/getpandas.html) modules.
 * R (tested in 3.2.3), and the following libraries: 
 	* [Rsamtools](https://bioconductor.org/packages/release/bioc/html/Rsamtools.html) 
 	* [OmicCircos](http://bioconductor.org/packages/release/bioc/html/OmicCircos.html)
