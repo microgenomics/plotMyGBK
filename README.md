@@ -5,7 +5,7 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 
 # Output example
 
-![outputexample](example/putida.pdf)
+![](example/putida.pdf)
 
 ## Requisites
 
