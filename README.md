@@ -1,4 +1,4 @@
-# plotMyGBK [work in progress: annotation input file parameter]
+# plotMyGBK
 -----------
 
 plotMyGBK is a very simple to use pipe that use a genbank file and give you a nice circular graph (using omiccircos to make the graph)
