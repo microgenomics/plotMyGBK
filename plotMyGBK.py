@@ -4661,6 +4661,10 @@ COG5665	K	CCR4-NOT transcriptional regulation complex, NOT5 subunit""")
 def printPlotStep():
 	plotstep=open("plotstep.R", 'w')
 	plotstep.write("""rm(list=ls());
+		
+if('OmicCircos' %in% rownames(installed.packages()) == FALSE){BiocManager::install('OmicCircos')}
+if('Rsamtools' %in% rownames(installed.packages()) == FALSE){BiocManager::install("Rsamtools")}
+
 library(Rsamtools)
 library(OmicCircos)
 library(data.table)
@@ -5005,7 +5009,7 @@ def GCcalc(filename,window,step,filteredcontigs):
 		filterc.close
 
 def main():
-	parser = OptionParser(usage = "Usage: python wrapper.py -f genbankfile.gbk")
+	parser = OptionParser(usage = "Usage: python wrapper.py -g genbankfile.gbk")
 	parser.add_option("-g","--gbk",dest="filename",help="Input Fasta format file",metavar="GENBANK FILE")
 	parser.add_option("-c","--cogAssignFile",dest="cogoption",help="default:None, tsv from prokka outputs that include COGs and the specific CDS you may want to plot",default=None)
 	parser.add_option("-f","--filterContigs",dest="filterc",help="default:False, show only contigs that contains genes",default=False, action='store_true')
