@@ -19,13 +19,13 @@ plotMyGBK is a very simple to use pipe that use a genbank file and give you a ni
 
 plotMyGBK have minimal use:
 
-	python plotMyGBK.py -f mygenbank.gbk
+	python plotMyGBK.py -g mygenbank.gbk
 
 and a complete use:
 	
-	python plotMyGBK.py -f mygenbank.gbk -c annotationFile.tsv -w 3000 -s 1500 -l 500
+	python plotMyGBK.py -g mygenbank.gbk -c annotationFile.tsv -w 3000 -s 1500 -l 500
 
-* -f is the genbank file
+* -g is the genbank file
 * -c annotation file from prokka that contain the COG annotation (or something with that format).
 * -w Windows size, to computing GC content and GC skew set the windows size, default:3000
 * -s Step size, size in bp to move windows (-w), default:1500
