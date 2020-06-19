@@ -36,10 +36,6 @@ and a complete use:
 
 Since your gbk, plotMyGBK will generate a folder called results\_GBKNAME.faa where GBKNAME is the genbank file, this folder contain several files like faa, fna, parsed rpsblast results, other files necessaries to plot and last the plot in pdf format.
 
-## Notes
-* When you execute plotMyGBK.py make sure data folder and plotstep.R are in that directory.
-* The rpsblast in the data folder was compiled in Mac OSX, if you use other OS, you have to put the corresponding binary of rpsblast in this data folder
-
 ## References
 * Ying Hu Chunhua Yan <yanch@mail.nih.gov> (2015). OmicCircos: High-quality circular visualization of omics data. R package version
   1.8.1.
