@@ -1,7 +1,7 @@
 # plotMyGBK
 -----------
 
-plotMyGBK is a very simple to use pipe that use a genbank file and give you a nice circular graph (using omiccircos to make the graph)
+plotMyGBK is a easy to use tool that use a genbank file to retrieve you a nice circular chart
 
 # Output example
 
@@ -41,4 +41,4 @@ Since your gbk, plotMyGBK will generate a folder called results\_GBKNAME.faa whe
   1.8.1.
 
 ## Warning
-* The script will plot at least all contigs with genes, this is ideal for prokaryotes gbk where are some contigs (~100 or less), but when you plot five hundred or more contgis, maybe will not look nicely.
+* The script will plot at least all contigs, this is ideal for prokaryotes gbk files where there are few contigs (~100 or less), more than that might not look nicely.
